@@ -17,11 +17,12 @@ import java.util.stream.Collectors;
 
 
 
+
 @Service
-public class UserServiceImp implements IUserService, UserDetailsService {
+public class UserServiceImpl implements IUserService, UserDetailsService {
 
     @Autowired
-    private UserRepository userRepo;
+    private UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -31,20 +32,15 @@ public class UserServiceImp implements IUserService, UserDetailsService {
         String passwd = user.getPassword();
         String encodedPasswod = passwordEncoder.encode(passwd);
         user.setPassword(encodedPasswod);
-        user = userRepo.save(user);
+        user = userRepository.save(user);
         return user.getId();
-    }
-
-    @Override
-    public List<User> getUsers() {
-        return userRepo.findAll();
     }
 
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        Optional<User> opt = userRepo.findUserByEmail(email);
+        Optional<User> opt = userRepository.findUserByEmail(email);
 
         if (opt.isEmpty())
             throw new UsernameNotFoundException("User with email: " + email + " not found !");

@@ -14,7 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
 @Configuration
-public class WebSecurityConfig {
+public class SecurityConfig {
 
     @Autowired
     private UserDetailsService uds;
@@ -26,17 +26,15 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests()
-                .requestMatchers("/home", "/register", "/saveUser").permitAll()
+                .requestMatchers("/home","/register","/saveUser").permitAll()
                 .requestMatchers("/welcome").authenticated()
                 .requestMatchers("/admin").hasAuthority("Admin")
-                .requestMatchers("/mgr").hasAuthority("Manager")
-                .requestMatchers("/emp").hasAuthority("Employee")
-                .requestMatchers("/hr").hasAuthority("HR")
-                .requestMatchers("/common").hasAnyAuthority("Employeee", "Manager", "Admin")
+                .requestMatchers("/common").hasAnyAuthority( "User", "Admin", "Visitor")
                 .anyRequest().authenticated()
+
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/welcome", true)
+                .defaultSuccessUrl("/welcome",true)
 
                 .and()
                 .logout()
@@ -60,5 +58,4 @@ public class WebSecurityConfig {
         authenticationProvider.setPasswordEncoder(encoder);
         return authenticationProvider;
     }
-
 }

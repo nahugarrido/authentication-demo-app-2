@@ -10,6 +10,4 @@ public interface IUserService {
     // Save user and returns the user id
     public Integer saveUser(User user);
 
-    // Get all users
-    public List<User> getUsers();
 }
